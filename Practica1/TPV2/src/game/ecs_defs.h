@@ -11,10 +11,13 @@
 	_FIGHTERCTRL, \
 	_STARMOTION, \
 	_GAMECTRL, \
-	_SHOWATOPPOSITESIDE, \
+	_BORDERINTERACTION, \
 	_DEACCELERATION, \
 	_HEALTH, \
-	_GUN
+	_GUN, \
+	_GENERATIONS, \
+	_FOLLOW, \
+	_STATE
 
 
 // Groups list - must have at least one element

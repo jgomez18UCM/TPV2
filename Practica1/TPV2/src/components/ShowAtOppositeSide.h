@@ -8,7 +8,7 @@ class Transform;
 class ShowAtoppositeSide: public ecs::Component {
 public:
 
-	__CMPID_DECL__(ecs::_SHOWATOPPOSITESIDE)
+	__CMPID_DECL__(ecs::_BORDERINTERACTION)
 
 	ShowAtoppositeSide();
 	virtual ~ShowAtoppositeSide();

@@ -17,5 +17,12 @@ public:
 private:
 	void checkCollisions();
 	ecs::Manager *mngr_;
+	enum GameState {
+		NEWGAME,
+		RUNNIG,
+		PAUSED,
+		GAMEOVER
+	};
+	GameState state_;
 };
 

@@ -23,5 +23,6 @@ public:
 private:
 	void createStart();
 	Transform *tr_;
+	float thrust_;
 };
 

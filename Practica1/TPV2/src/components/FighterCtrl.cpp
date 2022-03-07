@@ -13,7 +13,7 @@
 #include "Transform.h"
 
 FighterCtrl::FighterCtrl() :
-		tr_(nullptr) {
+		tr_(nullptr), thrust_(0.2f) {
 }
 
 FighterCtrl::~FighterCtrl() {
@@ -47,14 +47,15 @@ void FighterCtrl::update() {
 			// direction where it moves
 			//
 			vel_ = vel_.rotate(-5.0f);
-		}else if (ihldr.isKeyDown(SDL_SCANCODE_UP)) { // increase speed
-			
+		}
+		if (ihldr.isKeyDown(SDL_SCANCODE_UP)) { // increase speed
 			auto& s = sdlutils().soundEffects().at("thrust");
 			s.play();
-		
+			
+			Vector2D newVel = vel_ + Vector2D(0, -1).rotate(rot) * thrust_;
 			// add 1.0f to the speed (respecting the limit 3.0f). Recall
 			// that speed is the length of the velocity vector
-			float speed = std::min(3.0f, vel_.magnitude() + 1.0f);
+			float speed = std::min(3.0f, newVel.magnitude());
 			
 			// change the length of velocity vecto to 'speed'. We need
 			// '.rotate(rot)' for the case in which the current speed is

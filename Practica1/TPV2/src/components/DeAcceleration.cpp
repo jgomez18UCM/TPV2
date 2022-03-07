@@ -29,7 +29,7 @@ void DeAcceleration::update()
 		float speed = vel.magnitude() * deAcc_;
 		vel = Vector2D(0,-speed).rotate(tr_->getRot());
 	}
-	if (vel.magnitude() <= 0.05f) {
+	if (vel.magnitude() <= 0.01f) {
 		vel= Vector2D(0,0).rotate(tr_->getRot());
 	}
 }

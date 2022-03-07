@@ -11,6 +11,7 @@
 #include "../components/FramedImage.h"
 #include "../components/Health.h"
 #include "../components/Gun.h"
+#include "../components/Follow.h"
 
 #include "../ecs/Entity.h"
 #include "../ecs/Manager.h"
@@ -26,7 +27,7 @@ using ecs::Entity;
 using ecs::Manager;
 
 Game::Game() :
-		mngr_(nullptr) {
+		mngr_(nullptr), state_(NEWGAME) {
 }
 
 Game::~Game() {
@@ -55,15 +56,16 @@ void Game::init() {
 	fighter->addComponent<ShowAtoppositeSide>();
 	fighter->addComponent<DeAcceleration>(0.995f);
 	fighter->addComponent<Health>(3, &sdlutils().images().at("heart"));
-	fighter->addComponent<Gun>(3000, &sdlutils().images().at("bullet"));
+	fighter->addComponent<Gun>(250, &sdlutils().images().at("bullet"));
 
 	auto asteroid = mngr_->addEntity();
 	auto astTr = asteroid->addComponent<Transform>();
 	auto as = 50.0f;
 	auto ax = 100.0f;
 	auto ay = 50.0f;
-	astTr->init(Vector2D(ax, ay), Vector2D(), as, as, 0.0f);
+	astTr->init(Vector2D(ax, ay), Vector2D(0,-1), as, as, 0.0f);
 	asteroid->addComponent<FramedImage>(&sdlutils().images().at("asteroidA"), 85, 100);
+	asteroid->addComponent<Follow>();
 	// create the game info entity
 	auto ginfo = mngr_->addEntity();
 	mngr_->setHandler(ecs::_hdlr_GAMEINFO, ginfo);

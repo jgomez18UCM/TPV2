@@ -59,17 +59,22 @@
 
   "messages": [
     {
-      "id": "PressAnyKey",
-      "text": "Press Any Key",
-      "font": "ARIAL24",
-      "color": "0x112233ff",
-      "bg": "0xffffffff"
+      "id": "startGame",
+      "text": "Press SPACE to start a new game",
+      "font": "ARIAL48",
+      "color": "0x00000000"
     },
     {
-      "id": "HelloSDL",
-      "text": "Hello SDL!",
+      "id": "continue",
+      "text": "Press SPACE to continue the game",
       "font": "ARIAL48",
-      "color": "0x0000ffff"
+      "color": "0x00000000"
+    },
+    {
+      "id": "gameOver",
+      "text": "Game over, press SPACE to restart",
+      "font": "ARIAL48",
+      "color": "0x00000000"
     },
     {
       "id": "addstars",
