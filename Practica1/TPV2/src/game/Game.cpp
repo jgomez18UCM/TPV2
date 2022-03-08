@@ -2,16 +2,7 @@
 
 #include "Game.h"
 
-#include "../components/GameCtrl.h"
-#include "../components/Image.h"
-#include "../components/FighterCtrl.h"
-#include "../components/ShowAtOppositeSide.h"
-#include "../components/DeAcceleration.h"
-#include "../components/Transform.h"
-#include "../components/FramedImage.h"
-#include "../components/Health.h"
-#include "../components/Gun.h"
-#include "../components/Follow.h"
+#include "component_headers.h"
 
 #include "../ecs/Entity.h"
 #include "../ecs/Manager.h"
@@ -53,10 +44,10 @@ void Game::init() {
 	tr->init(Vector2D(x, y), Vector2D(), s, s, 0.0f);
 	fighter->addComponent<Image>(&sdlutils().images().at("fighter"));
 	fighter->addComponent<FighterCtrl>();
-	fighter->addComponent<ShowAtoppositeSide>();
 	fighter->addComponent<DeAcceleration>(0.995f);
+	fighter->addComponent<ShowAtoppositeSide>();
 	fighter->addComponent<Health>(3, &sdlutils().images().at("heart"));
-	fighter->addComponent<Gun>(250, &sdlutils().images().at("bullet"));
+	//fighter->addComponent<Gun>(250, &sdlutils().images().at("bullet"));
 
 	auto asteroid = mngr_->addEntity();
 	auto astTr = asteroid->addComponent<Transform>();

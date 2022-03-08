@@ -36,6 +36,7 @@
     <ClInclude Include="src\ecs\ecs.h" />
     <ClInclude Include="src\ecs\Entity.h" />
     <ClInclude Include="src\ecs\Manager.h" />
+    <ClInclude Include="src\game\component_headers.h" />
     <ClInclude Include="src\game\ecs_defs.h" />
     <ClInclude Include="src\game\Game.h" />
     <ClInclude Include="src\json\JSON.h" />

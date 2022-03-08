@@ -51,6 +51,7 @@ void FighterCtrl::update() {
 		if (ihldr.isKeyDown(SDL_SCANCODE_UP)) { // increase speed
 			auto& s = sdlutils().soundEffects().at("thrust");
 			s.play();
+			std::cout << "acelerando" << std::endl;
 			
 			Vector2D newVel = vel_ + Vector2D(0, -1).rotate(rot) * thrust_;
 			// add 1.0f to the speed (respecting the limit 3.0f). Recall
@@ -62,8 +63,7 @@ void FighterCtrl::update() {
 			// 0, so we rotate it to the same direction where the PacMan
 			// is looking
 			//
-			vel_ = Vector2D(0, -speed).rotate(rot);
-			
+			vel_ = Vector2D(0, -speed).rotate(rot);			
 		} 
 	}
 }
