@@ -4,6 +4,7 @@ class Entity;
 class AsteroidsManager : public ecs::Component
 {
 public:
+	__CMPID_DECL__(ecs::_ASTEROIDSMANAGER)
 	AsteroidsManager();
 	AsteroidsManager(int asteroidLimit, int delay);
 	~AsteroidsManager();
@@ -11,7 +12,8 @@ public:
 	void onCollision(Entity* e);
 	void startRound();
 protected:
-	void generateAsteroid(bool typeB);
+	void generateNewAsteroid(bool typeB);
+	void crashAsteroid();
 	int asteroidLimit_;
 	int asteroids_;
 	int spawnDelay_;

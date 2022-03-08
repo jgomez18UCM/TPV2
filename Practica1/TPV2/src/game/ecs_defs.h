@@ -17,7 +17,8 @@
 	_GUN, \
 	_GENERATIONS, \
 	_FOLLOW, \
-	_STATE
+	_STATE, \
+	_ASTEROIDSMANAGER
 
 
 // Groups list - must have at least one element
@@ -30,5 +31,6 @@
 //
 #define _HDLRS_LIST_ \
     _hdlr_FIGHTER, \
-	_hdlr_GAMEINFO
+	_hdlr_GAMEINFO, \
+	_hdlr_ASTEROIDSMANAGER
 

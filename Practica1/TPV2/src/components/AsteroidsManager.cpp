@@ -25,9 +25,10 @@ AsteroidsManager::~AsteroidsManager()
 void AsteroidsManager::update()
 {
 	if (lastSpawn_ + spawnDelay_ > sdlutils().currRealTime()) return;
-
+	std::cout << "spawn" << std::endl;
 	bool typeB = sdlutils().rand().nextInt(0, 101) < 30;
-	generateAsteroid(typeB);
+	generateNewAsteroid(typeB);
+	lastSpawn_ = sdlutils().currRealTime();
 	
 }
 
@@ -39,13 +40,14 @@ void AsteroidsManager::startRound()
 {
 	for (int i = 0; i < 10; i++) {
 		bool typeB = sdlutils().rand().nextInt(0, 100) <= 30;
-		generateAsteroid(typeB);
+		generateNewAsteroid(typeB);
 	}
 }
 
-void AsteroidsManager::generateAsteroid(bool typeB)
+void AsteroidsManager::generateNewAsteroid(bool typeB)
 {
 	if (asteroids_ >= asteroidLimit_) return;
+	asteroids_++;
 	//Utilidades
 	auto& rand = sdlutils().rand();
 	auto height = sdlutils().height();
@@ -80,7 +82,7 @@ void AsteroidsManager::generateAsteroid(bool typeB)
 	auto p = Vector2D(x, y);
 
 	//Calculo de la velocidad
-	auto r = Vector2D(rand.nextInt(100, -100), rand.nextInt(100, -100));
+	auto r = Vector2D(rand.nextInt(-100, 100), rand.nextInt(-100, 100));
 	auto c = Vector2D(sdlutils().width() / 2, sdlutils().height() / 2) + r;
 	float speed = rand.nextInt(1, 10) / 10.0f;
 	Vector2D v = (c - p).normalize() * speed;
@@ -90,7 +92,9 @@ void AsteroidsManager::generateAsteroid(bool typeB)
 	asTr->init(p, v, size, size, 0.0f);
 	
 	//Resto de componentes
-	asteroid->addComponent<FramedImage>(&sdlutils().images().at(typeB ? "asteroidB" : "asteroidA"));
+	asteroid->addComponent<FramedImage>(&sdlutils().images().at(typeB ? "asteroidB" : "asteroidA"), 85,100);
 	if(typeB) asteroid->addComponent<Follow>();
 	asteroid->addComponent<ShowAtoppositeSide>();
+
+	asteroid->addToGroup(ecs::_grp_ASTEROIDS);
 }

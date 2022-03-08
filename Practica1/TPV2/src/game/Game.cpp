@@ -14,7 +14,7 @@
 #include "../utils/Collisions.h"
 
 
-using ecs::Entity;
+
 using ecs::Manager;
 
 Game::Game() :
@@ -47,20 +47,16 @@ void Game::init() {
 	fighter->addComponent<DeAcceleration>(0.995f);
 	fighter->addComponent<ShowAtoppositeSide>();
 	fighter->addComponent<Health>(3, &sdlutils().images().at("heart"));
-	//fighter->addComponent<Gun>(250, &sdlutils().images().at("bullet"));
-
-	auto asteroid = mngr_->addEntity();
-	auto astTr = asteroid->addComponent<Transform>();
-	auto as = 50.0f;
-	auto ax = 100.0f;
-	auto ay = 50.0f;
-	astTr->init(Vector2D(ax, ay), Vector2D(0,-1), as, as, 0.0f);
-	asteroid->addComponent<FramedImage>(&sdlutils().images().at("asteroidA"), 85, 100);
-	asteroid->addComponent<Follow>();
-	// create the game info entity
+	fighter->addComponent<Gun>(250, &sdlutils().images().at("bullet"));
+	//create the game info entity
 	auto ginfo = mngr_->addEntity();
 	mngr_->setHandler(ecs::_hdlr_GAMEINFO, ginfo);
 	ginfo->addComponent<GameCtrl>();
+	//create the asteroid manager
+	auto astManager = mngr_->addEntity();
+	auto AMComponent = astManager->addComponent<AsteroidsManager>(30, 5000);
+	AMComponent->startRound();
+	mngr_->setHandler(ecs::_hdlr_ASTEROIDSMANAGER, astManager);
 }
 
 void Game::start() {
