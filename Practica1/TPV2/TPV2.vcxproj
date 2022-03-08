@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\components\AsteroidsManager.h" />
     <ClInclude Include="src\components\DisableOnExit.h" />
     <ClInclude Include="src\components\Follow.h" />
     <ClInclude Include="src\components\Generations.h" />
@@ -58,6 +59,7 @@
     <ClInclude Include="src\utils\Vector2D.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\components\AsteroidsManager.cpp" />
     <ClCompile Include="src\components\DisableOnExit.cpp" />
     <ClCompile Include="src\components\Follow.cpp" />
     <ClCompile Include="src\components\Generations.cpp" />

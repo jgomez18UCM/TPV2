@@ -162,6 +162,9 @@
     <ClInclude Include="src\game\component_headers.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\components\AsteroidsManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\json\JSONValue.cpp">
@@ -240,6 +243,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\components\DisableOnExit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\components\AsteroidsManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
