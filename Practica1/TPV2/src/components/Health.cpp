@@ -30,11 +30,12 @@ void Health::render()
 
 void Health::getDamage(int damage)
 {
+	health_ -= damage;
 }
 
 int Health::getHealth()
 {
-	return 0;
+	return health_;
 }
 
 void Health::resetHealth()

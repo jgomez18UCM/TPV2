@@ -32,14 +32,20 @@ void AsteroidsManager::update()
 	
 }
 
-void AsteroidsManager::onCollision(Entity* e)
+void AsteroidsManager::onCollision(ecs::Entity* e)
 {
+	asteroids_--;
+	e->setAlive(false);
+	if (e->getComponent<Generations>()->getGenerations() > 1) {
+		crashAsteroid(e);
+		crashAsteroid(e);
+	}	
 }
 
 void AsteroidsManager::startRound()
 {
 	for (int i = 0; i < 10; i++) {
-		bool typeB = sdlutils().rand().nextInt(0, 100) <= 30;
+		bool typeB = sdlutils().rand().nextInt(0, 101) < 30;
 		generateNewAsteroid(typeB);
 	}
 }
@@ -58,12 +64,12 @@ void AsteroidsManager::generateNewAsteroid(bool typeB)
 
 	//Calculo de generaciones y tamaño
 	auto gens = asteroid->addComponent<Generations>();
-	auto asGen = rand.nextInt(1, 3);
+	auto asGen = rand.nextInt(1, 4);
 	gens->setGenerations(asGen);
 	auto size = 10.0f + 5.0f * asGen;
 
 	//Calculo de la posicion en los bordes
-	auto border = rand.nextInt(0, 3);
+	auto border = rand.nextInt(0, 4);
 	float x = rand.nextInt(0, width - size), y = rand.nextInt(0, height - size);
 	switch (border) {
 	case 0:
@@ -97,4 +103,31 @@ void AsteroidsManager::generateNewAsteroid(bool typeB)
 	asteroid->addComponent<ShowAtoppositeSide>();
 
 	asteroid->addToGroup(ecs::_grp_ASTEROIDS);
+}
+
+void AsteroidsManager::crashAsteroid(ecs::Entity* e)
+{
+	if (asteroids_ >= asteroidLimit_) return;
+	asteroids_++;
+
+	// Creacion de la entidad
+	auto asteroid = mngr_->addEntity();
+	auto fTR = e->getComponent<Transform>();
+	auto fPos = fTR->getPos();
+	auto fVel = fTR->getVel();
+	auto fW = fTR->getWidth();
+	auto fH = fTR->getHeight();
+	auto r = sdlutils().rand().nextInt(0, 361);
+	//Calculo de generaciones y tamaño
+	auto gens = asteroid->addComponent<Generations>();
+	gens->setGenerations(e->getComponent<Generations>()->getGenerations() - 1);
+	auto tr = asteroid->addComponent<Transform>();
+	auto size = 10.0f + 5.0f * gens->getGenerations();
+	auto pos = fPos + fVel.rotate(r) * 2 * std::max(fW, fH);
+	auto vel = fVel.rotate(r) * 1.1f;
+	tr->init(pos, vel, size, size, r);
+	auto type = sdlutils().rand().nextInt(0, 101) <= 30;
+	asteroid->addComponent<FramedImage>(&sdlutils().images().at(type? "asteroidB":"asteroidA"), 85,100);
+	asteroid->addComponent<ShowAtoppositeSide>();
+	if (type) asteroid->addComponent<Follow>();
 }

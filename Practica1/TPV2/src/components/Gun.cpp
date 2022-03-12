@@ -49,6 +49,6 @@ void Gun::generateBullet()
 	auto bulletVel = Vector2D(0.0f, -1.0f).rotate(rot) * (vel.magnitude() + 5.0f);
 	bulletTr->init(bulletPos, bulletVel, 5.0f, 20.0f, rot);
 	bullet->addComponent<Image>(bulletTx_);
-	ent_->addToGroup(ecs::_grp_BULLETS);
+	bullet->addToGroup(ecs::_grp_BULLETS);
 
 }

@@ -29,7 +29,6 @@ void Game::init() {
 
 	// initialise the SDLUtils singleton
 	SDLUtils::init("Demo", 800, 600, "resources/config/asteroid.resources.json");
-
 	// Create the manager
 	mngr_ = new Manager();
 
@@ -99,25 +98,44 @@ void Game::checkCollisions() {
 	// the PacMan's Transform
 	//
 	auto pTR = mngr_->getHandler(ecs::_hdlr_FIGHTER)->getComponent<Transform>();
+	auto pHealth = mngr_->getHandler(ecs::_hdlr_FIGHTER)->getComponent<Health>();
 
 	for (auto e : mngr_->getEntitiesByGroup(ecs::_grp_ASTEROIDS)) {
 
 		if (e->isAlive()) { // if the star is active (it might have died in this frame)
 
 			// the Star's Transform
-			//
 			auto eTR = e->getComponent<Transform>();
 
 			// check if PacMan collides with the Star (i.e., eat it)
-			if (Collisions::collides(pTR->getPos(), pTR->getWidth(),
-					pTR->getHeight(), //
-					eTR->getPos(), eTR->getWidth(), eTR->getHeight())) {
+			if (Collisions::collidesWithRotation(pTR->getPos(), pTR->getWidth(), pTR->getHeight(), pTR->getRot(),
+					eTR->getPos(), eTR->getWidth(), eTR->getHeight(), eTR->getRot())) {
 				e->setAlive(false);
 				mngr_->getHandler(ecs::_hdlr_GAMEINFO)->getComponent<GameCtrl>()->onStarEaten();
-
+				
+				pHealth->getDamage(1);
+				if (pHealth->getHealth() <= 0) {
+					//Cosas de estados
+				}else{
+					//Cosas de estados
+				}
 				// play sound on channel 1 (if there is something playing there
 				// it will be cancelled
-				sdlutils().soundEffects().at("pacman_eat").play(0, 1);
+				sdlutils().soundEffects().at("explosion").play(0, 1);
+			}
+
+			for (auto b : mngr_->getEntitiesByGroup(ecs::_grp_BULLETS)) {
+				auto bTR = b->getComponent<Transform>();
+				if (Collisions::collidesWithRotation(bTR->getPos(), bTR->getWidth(), bTR->getHeight(), bTR->getRot(),
+												eTR->getPos(), eTR->getWidth(), eTR->getHeight(), eTR->getRot())) {
+					b->setAlive(false);
+					sdlutils().soundEffects().at("explosion").play(0, 1);
+					auto AM = mngr_->getHandler(ecs::_hdlr_ASTEROIDSMANAGER)->getComponent<AsteroidsManager>();
+					AM->onCollision(e);
+					if (AM->getAsteroids() <= 0) {
+						//Acabar ronda xd
+					}
+				}
 			}
 		}
 	}
