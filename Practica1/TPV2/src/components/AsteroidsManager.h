@@ -12,6 +12,8 @@ public:
 	void onCollision(ecs::Entity* e);
 	void startRound();
 	int getAsteroids() { return asteroids_; };
+	void destroyAll();
+	void setActive(bool set) { active_ = set; };
 protected:
 	void generateNewAsteroid(bool typeB);
 	void crashAsteroid(ecs::Entity* e);
@@ -19,5 +21,6 @@ protected:
 	int asteroids_;
 	int spawnDelay_;
 	int lastSpawn_;
+	bool active_;
 };
 

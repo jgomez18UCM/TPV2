@@ -7,14 +7,12 @@
 #include "../sdlutils/InputHandler.h"
 #include "../sdlutils/SDLUtils.h"
 #include "../sdlutils/Texture.h"
-#include "Image.h"
-#include "StarMotion.h"
+#include "FighterCtrl.h"
+#include "AsteroidsManager.h"
 #include "Transform.h"
+#include "Health.h"
 
-GameCtrl::GameCtrl() :
-		currNumOfStars_(0), //
-		score_(0), //
-		starsLimit_(30) {
+GameCtrl::GameCtrl() : gameState(NEWGAME) {
 }
 
 GameCtrl::~GameCtrl() {
@@ -25,62 +23,77 @@ void GameCtrl::initComponent() {
 
 void GameCtrl::update() {
 	auto &ihldr = ih();
-
+	if (gameState == RUNNING) return;
 	if (ihldr.keyDownEvent()) {
 		if (ihldr.isKeyDown(SDL_SCANCODE_SPACE)) { // create start
-			createStart(std::min(5u, starsLimit_ - currNumOfStars_));
+			if (gameState == GAMEOVER || gameState == WIN) {
+				restart();
+			}
+			else {
+				newRound();
+			}
 		}
 	}
 }
 
 void GameCtrl::render() {
-
-	// draw the score
-	//
-	Texture scoreTex(sdlutils().renderer(), std::to_string(score_),
-			sdlutils().fonts().at("ARIAL24"), build_sdlcolor(0x444444ff));
-
-	SDL_Rect dest = build_sdlrect( //
-			(sdlutils().width() - scoreTex.width()) / 2.0f, //
-			10.0f, //
-			scoreTex.width(), //
-			scoreTex.height());
-
-	scoreTex.render(dest);
-
-	// draw add stars message
-	sdlutils().msgs().at("addstars").render(10, 10);
+	auto x = 0;
+	auto y = 0;
+	switch (gameState) {
+	case NEWGAME:
+		sdlutils().msgs().at("newgame").render(x, y);
+		break;
+	case PAUSED:
+		sdlutils().msgs().at("paused").render(x, y);
+		break;
+	case WIN:
+		sdlutils().msgs().at("win").render(x, y);
+		break;
+	case GAMEOVER:
+		sdlutils().msgs().at("gameover").render(x, y);
+		break;
+	default:
+		break;
+	}
 }
 
-void GameCtrl::createStart(unsigned int n) {
+void GameCtrl::endGame(bool win)
+{
+	pause();
+	gameState = win ? WIN : GAMEOVER;
+}
 
-	for (auto i = 0u; i < n; i++) {
-		// Always use the random number generator provided by SDLUtils
-		//
-		auto &rand = sdlutils().rand();
-
-		// add and entity to the manager
-		//
-		auto e = mngr_->addEntity();
-		e->addToGroup(ecs::_grp_ASTEROIDS);
-
-		// add a Transform component, and initialise it with random
-		// size and position
-		//
-		auto tr = e->addComponent<Transform>();
-		auto s = rand.nextInt(50, 100);
-		auto x = rand.nextInt(0, sdlutils().width() - s);
-		auto y = rand.nextInt(0, sdlutils().height() - s);
-		tr->init(Vector2D(x, y), Vector2D(), s, s, 0.0f);
-
-		// add an Image Component
-		//
-		e->addComponent<Image>(&sdlutils().images().at("star"));
-
-		// add a StarMotion component to resize/rotare the star
-		//
-		e->addComponent<StarMotion>();
-
-		currNumOfStars_++;
+void GameCtrl::pause()
+{
+	gameState = PAUSED;
+	auto player = mngr_->getHandler(ecs::_hdlr_FIGHTER);
+	auto asMan = mngr_->getHandler(ecs::_hdlr_ASTEROIDSMANAGER)->getComponent<AsteroidsManager>();
+	//Manager destruir asteroides
+	asMan->destroyAll();
+	asMan->setActive(false);
+	//Desactivar control
+	player->getComponent<FighterCtrl>()->setMove(false);
+	auto tr = player->getComponent<Transform>();
+	//Reseteo posicion
+	tr->init(Vector2D(sdlutils().width() / 2, sdlutils().height() / 2), Vector2D(), tr->getWidth(), tr->getHeight(), 0.0f);
+	for (auto b : mngr_->getEntitiesByGroup(ecs::_grp_BULLETS)) {
+		b->setAlive(false);
 	}
+}
+
+void GameCtrl::newRound() {
+	gameState = RUNNING;
+	auto player = mngr_->getHandler(ecs::_hdlr_FIGHTER);
+	auto asMan = mngr_->getHandler(ecs::_hdlr_ASTEROIDSMANAGER)->getComponent<AsteroidsManager>();
+	asMan->startRound();
+	asMan->setActive(true);
+	//Activar Control
+	player->getComponent<FighterCtrl>()->setMove(true);
+}
+
+void GameCtrl::restart()
+{
+	gameState = NEWGAME;
+	auto player = mngr_->getHandler(ecs::_hdlr_FIGHTER);
+	player->getComponent<Health>()->resetHealth();
 }

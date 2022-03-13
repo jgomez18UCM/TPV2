@@ -30,7 +30,6 @@
     <ClInclude Include="src\components\GameCtrl.h" />
     <ClInclude Include="src\components\Image.h" />
     <ClInclude Include="src\components\FighterCtrl.h" />
-    <ClInclude Include="src\components\StarMotion.h" />
     <ClInclude Include="src\components\ShowAtOppositeSide.h" />
     <ClInclude Include="src\components\Transform.h" />
     <ClInclude Include="src\ecs\Component.h" />
@@ -70,7 +69,6 @@
     <ClCompile Include="src\components\GameCtrl.cpp" />
     <ClCompile Include="src\components\Image.cpp" />
     <ClCompile Include="src\components\FighterCtrl.cpp" />
-    <ClCompile Include="src\components\StarMotion.cpp" />
     <ClCompile Include="src\components\ShowAtOppositeSide.cpp" />
     <ClCompile Include="src\ecs\Entity.cpp" />
     <ClCompile Include="src\ecs\Manager.cpp" />

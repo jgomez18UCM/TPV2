@@ -11,5 +11,5 @@
 #include "../components/Health.h"
 #include "../components/Image.h"
 #include "../components/ShowAtOppositeSide.h"
-#include "../components/StarMotion.h"
+
 #include "../components/AsteroidsManager.h"

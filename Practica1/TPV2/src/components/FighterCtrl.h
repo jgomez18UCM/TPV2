@@ -19,9 +19,11 @@ public:
 	virtual ~FighterCtrl();
 	void initComponent() override;
 	void update() override;
+	void setMove(bool set) { canMove_ = set; };
 
 private:
 	Transform *tr_;
 	float thrust_;
+	bool canMove_;
 };
 

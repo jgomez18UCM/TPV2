@@ -18,7 +18,7 @@
 using ecs::Manager;
 
 Game::Game() :
-		mngr_(nullptr), state_(NEWGAME) {
+		mngr_(nullptr) {
 }
 
 Game::~Game() {
@@ -54,7 +54,7 @@ void Game::init() {
 	//create the asteroid manager
 	auto astManager = mngr_->addEntity();
 	auto AMComponent = astManager->addComponent<AsteroidsManager>(30, 5000);
-	AMComponent->startRound();
+	AMComponent->setActive(false);
 	mngr_->setHandler(ecs::_hdlr_ASTEROIDSMANAGER, astManager);
 }
 
@@ -99,6 +99,7 @@ void Game::checkCollisions() {
 	//
 	auto pTR = mngr_->getHandler(ecs::_hdlr_FIGHTER)->getComponent<Transform>();
 	auto pHealth = mngr_->getHandler(ecs::_hdlr_FIGHTER)->getComponent<Health>();
+	auto gCtrl = mngr_->getHandler(ecs::_hdlr_GAMEINFO)->getComponent<GameCtrl>();
 
 	for (auto e : mngr_->getEntitiesByGroup(ecs::_grp_ASTEROIDS)) {
 
@@ -111,14 +112,14 @@ void Game::checkCollisions() {
 			if (Collisions::collidesWithRotation(pTR->getPos(), pTR->getWidth(), pTR->getHeight(), pTR->getRot(),
 					eTR->getPos(), eTR->getWidth(), eTR->getHeight(), eTR->getRot())) {
 				e->setAlive(false);
-				mngr_->getHandler(ecs::_hdlr_GAMEINFO)->getComponent<GameCtrl>()->onStarEaten();
-				
+								
 				pHealth->getDamage(1);
 				if (pHealth->getHealth() <= 0) {
-					//Cosas de estados
+					gCtrl->endGame(false);
 				}else{
-					//Cosas de estados
+					gCtrl->pause();
 				}
+				//gCtrl->onFighterHit();
 				// play sound on channel 1 (if there is something playing there
 				// it will be cancelled
 				sdlutils().soundEffects().at("explosion").play(0, 1);
@@ -133,7 +134,7 @@ void Game::checkCollisions() {
 					auto AM = mngr_->getHandler(ecs::_hdlr_ASTEROIDSMANAGER)->getComponent<AsteroidsManager>();
 					AM->onCollision(e);
 					if (AM->getAsteroids() <= 0) {
-						//Acabar ronda xd
+						gCtrl->endGame(true);
 					}
 				}
 			}

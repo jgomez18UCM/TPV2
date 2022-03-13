@@ -8,28 +8,29 @@ class GameCtrl: public ecs::Component {
 public:
 
 	__CMPID_DECL__(ecs::_GAMECTRL)
-
+	enum State {
+		NEWGAME,
+		RUNNING,
+		PAUSED,
+		GAMEOVER,
+		WIN
+	};
 	GameCtrl();
 	virtual ~GameCtrl();
 
-	inline void onStarDeath() {
-		currNumOfStars_--;
-	}
-
-	inline void onStarEaten() {
-		currNumOfStars_--;
-		score_++;
+	inline void onFighterHit() {
+		
 	}
 
 	void initComponent() override;
 	void update() override;
 	void render() override;
+	void endGame(bool win);
+	void pause();
 
 private:
-	void createStart(unsigned int n);
-
-	unsigned int currNumOfStars_;
-	unsigned int score_;
-	unsigned int starsLimit_;
+	void newRound();
+	void restart();
+	State gameState;
 };
 

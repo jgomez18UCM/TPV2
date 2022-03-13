@@ -13,8 +13,8 @@ AsteroidsManager::AsteroidsManager() : asteroidLimit_(), asteroids_(), spawnDela
 {
 }
 
-AsteroidsManager::AsteroidsManager(int asteroidLimit, int delay): asteroidLimit_(asteroidLimit), asteroids_(),
-	spawnDelay_(delay), lastSpawn_()
+AsteroidsManager::AsteroidsManager(int asteroidLimit, int delay) : asteroidLimit_(asteroidLimit), asteroids_(),
+spawnDelay_(delay), lastSpawn_(), active_(true)
 {
 }
 
@@ -25,6 +25,7 @@ AsteroidsManager::~AsteroidsManager()
 void AsteroidsManager::update()
 {
 	if (lastSpawn_ + spawnDelay_ > sdlutils().currRealTime()) return;
+	if (!active_) return;
 	std::cout << "spawn" << std::endl;
 	bool typeB = sdlutils().rand().nextInt(0, 101) < 30;
 	generateNewAsteroid(typeB);
@@ -47,6 +48,13 @@ void AsteroidsManager::startRound()
 	for (int i = 0; i < 10; i++) {
 		bool typeB = sdlutils().rand().nextInt(0, 101) < 30;
 		generateNewAsteroid(typeB);
+	}
+}
+
+void AsteroidsManager::destroyAll()
+{
+	for (auto e : mngr_->getEntitiesByGroup(ecs::_grp_ASTEROIDS)) {
+		e->setAlive(false);
 	}
 }
 
@@ -130,4 +138,5 @@ void AsteroidsManager::crashAsteroid(ecs::Entity* e)
 	asteroid->addComponent<FramedImage>(&sdlutils().images().at(type? "asteroidB":"asteroidA"), 85,100);
 	asteroid->addComponent<ShowAtoppositeSide>();
 	if (type) asteroid->addComponent<Follow>();
+	asteroid->addToGroup(ecs::_grp_ASTEROIDS);
 }

@@ -9,11 +9,11 @@
 #include "../sdlutils/InputHandler.h"
 #include "../sdlutils/SDLUtils.h"
 #include "Image.h"
-#include "StarMotion.h"
+
 #include "Transform.h"
 
 FighterCtrl::FighterCtrl() :
-		tr_(nullptr), thrust_(0.2f) {
+		tr_(nullptr), thrust_(0.2f), canMove_(false) {
 }
 
 FighterCtrl::~FighterCtrl() {
@@ -27,7 +27,7 @@ void FighterCtrl::initComponent() {
 void FighterCtrl::update() {
 
 	auto &ihldr = ih();
-
+	if (!canMove_) return;
 	if (ihldr.keyDownEvent()) {
 
 		auto &vel_ = tr_->getVel();
