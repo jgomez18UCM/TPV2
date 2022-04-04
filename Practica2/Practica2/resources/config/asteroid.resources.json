@@ -1,0 +1,115 @@
+{
+
+  "fonts": [
+    {
+      "id": "ARIAL16",
+      "file": "resources/fonts/ARIAL.ttf",
+      "size": 16
+    },
+    {
+      "id": "ARIAL24",
+      "file": "resources/fonts/ARIAL.ttf",
+      "size": 24
+    },
+    {
+      "id": "ARIAL48",
+      "file": "resources/fonts/ARIAL.ttf",
+      "size": 48
+    }
+  ],
+
+  "images": [
+    {
+      "id": "sdl_logo",
+      "file": "resources/images/SDL_logo.png"
+    },
+    {
+      "id": "tennis_ball",
+      "file": "resources/images/tennis_ball.png"
+    },
+    {
+      "id": "star",
+      "file": "resources/images/star.png"
+    },
+    {
+      "id": "pacman",
+      "file": "resources/images/pacman.png"
+    },
+    {
+      "id": "fighter",
+      "file": "resources/images/fighter.png"
+    },
+    {
+      "id": "heart",
+      "file": "resources/images/heart.png"
+    },
+    {
+      "id": "asteroidA",
+      "file": "resources/images/asteroid.png"
+    },
+    {
+      "id": "asteroidB",
+      "file": "resources/images/asteroid_gold.png"
+    },
+    {
+      "id": "bullet",
+      "file": "resources/images/fire.png"
+    }
+  ],
+
+  "messages": [
+    {
+      "id": "newgame",
+      "text": "Press SPACE to start a new game",
+      "font": "ARIAL48",
+      "color": "0x00000000"
+    },
+    {
+      "id": "paused",
+      "text": "Press SPACE to continue the game",
+      "font": "ARIAL48",
+      "color": "0x00000000"
+    },
+    {
+      "id": "gameover",
+      "text": "Game over, press SPACE to restart",
+      "font": "ARIAL48",
+      "color": "0x00000000"
+    },
+    {
+      "id": "win",
+      "text": "You Win!, press SPACE to restart",
+      "font": "ARIAL16",
+      "color": "0x00ff00ff"
+    }
+  ],
+
+  "sounds": [
+    {
+      "id": "gunshot",
+      "file": "resources/sound/gunshot.wav"
+    },
+    {
+      "id": "explosion",
+      "file": "resources/sound/explosion.wav"
+    },
+    {
+      "id": "pacman_eat",
+      "file": "resources/sound/pacman_eat.wav"
+    },
+    {
+      "id": "thrust",
+      "file": "resources/sound/thrust.wav"
+    },
+    {
+      "id": "fire",
+      "file": "resources/sound/fire.wav"
+    }
+  ],
+
+  "musics": [
+    {"id": "beat", "file": "resources/sound/beat.wav"},
+    {"id": "imperial_march", "file": "resources/sound/imperial_march.wav"}
+  ]
+
+}
