@@ -10,6 +10,9 @@
 #include "../systems/GameCtrlSystem.h"
 #include "../systems/PaddlesSystem.h"
 #include "../systems/RenderSystem.h"
+#include "../systems/AsteroidsSystem.h"
+#include "../systems/BulletsSystem.h"
+#include "../systems/FighterSystem.h"
 #include "../utils/Vector2D.h"
 #include "../utils/Collisions.h"
 
@@ -21,7 +24,10 @@ Game::Game() :
 		paddlesSys_(nullptr), //
 		gameCtrlSys_(nullptr), //
 		collisionsSys_(nullptr), //
-		renderSys_(nullptr) {
+		renderSys_(nullptr),
+		asteroidsSys_(nullptr),
+		bulletsSys_(nullptr),
+		fighterSys_(nullptr){
 }
 
 Game::~Game() {
@@ -44,6 +50,9 @@ void Game::init() {
 	gameCtrlSys_ = mngr_->addSystem<GameCtrlSystem>();
 	collisionsSys_ = mngr_->addSystem<CollisionsSystem>();
 	renderSys_ = mngr_->addSystem<RenderSystem>();
+	/*asteroidsSys_ = mngr_->addSystem<AsteroidsSystem>();
+	bulletsSys_ = mngr_->addSystem<BulletsSystem>();
+	fighterSys_ = mngr_->addSystem<FighterSystem>();*/
 
 }
 
@@ -67,17 +76,20 @@ void Game::start() {
 
 		mngr_->refresh();
 
+		/*fighterSys_->update();*/
 		ballSys_->update();
 		paddlesSys_->update();
+		/*asteroidsSys_->update();
+		bulletsSys_->update();*/
 		collisionsSys_->update();
 		gameCtrlSys_->update();
-
+		
 		sdlutils().clearRenderer();
 		renderSys_->update();
 		sdlutils().presentRenderer();
 
 		Uint32 frameTime = sdlutils().currRealTime() - startTime;
-
+		 
 		if (frameTime < 10)
 			SDL_Delay(10 - frameTime);
 	}

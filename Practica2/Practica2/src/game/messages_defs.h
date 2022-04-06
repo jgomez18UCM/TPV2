@@ -30,5 +30,23 @@ struct Message {
 			ecs::Entity *e;
 		} ball_hit_paddle;
 
+		struct {
+			ecs::Entity* a;
+			ecs::Entity* b;
+		} collision_bullet_asteroid;
+		
+		struct {
+			Vector2D pos;
+			Vector2D vel;
+			double width;
+			double height;
+		} shoot;
+
+		struct {} round_over;
+		struct {} round_start;
+		struct {} game_start;
+		struct {} game_over;
+		struct {} collision_fighter_asteroid;
+		struct {} asteroids_extintion;
 	};
 };

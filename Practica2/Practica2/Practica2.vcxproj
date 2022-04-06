@@ -19,6 +19,15 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\components\DeAcceleration.h" />
+    <ClInclude Include="src\components\DisableOnExit.h" />
+    <ClInclude Include="src\components\Follow.h" />
+    <ClInclude Include="src\components\FramedImage.h" />
+    <ClInclude Include="src\components\Generations.h" />
+    <ClInclude Include="src\components\Gun.h" />
+    <ClInclude Include="src\components\Health.h" />
+    <ClInclude Include="src\components\ShowAtOppositeSide.h" />
+    <ClInclude Include="src\systems\FighterSystem.h" />
     <ClInclude Include="src\systems\BulletsSystem.h" />
     <ClInclude Include="src\systems\AsteroidsSystem.h" />
     <ClInclude Include="src\components\GameState.h" />
@@ -62,6 +71,15 @@
     <ClInclude Include="src\utils\Vector2D.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\components\DeAcceleration.cpp" />
+    <ClCompile Include="src\components\DisableOnExit.cpp" />
+    <ClCompile Include="src\components\Follow.cpp" />
+    <ClCompile Include="src\components\FramedImage.cpp" />
+    <ClCompile Include="src\components\Generations.cpp" />
+    <ClCompile Include="src\components\Gun.cpp" />
+    <ClCompile Include="src\components\Health.cpp" />
+    <ClCompile Include="src\components\ShowAtOppositeSide.cpp" />
+    <ClCompile Include="src\systems\FighterSystem.cpp" />
     <ClCompile Include="src\systems\BulletsSystem.cpp" />
     <ClCompile Include="src\systems\AsteroidsSystem.cpp" />
     <ClCompile Include="src\ecs\Manager.cpp" />

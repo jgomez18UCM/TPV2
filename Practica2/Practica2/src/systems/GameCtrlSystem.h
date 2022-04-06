@@ -5,6 +5,7 @@
 #include <cstdint>
 
 #include "../ecs/System.h"
+#include "../sdlutils/SDLUtils.h"
 
 struct GameState;
 
@@ -49,6 +50,11 @@ private:
 	void startGame();
 	void roundOver();
 	void gameOver();
+
+	void onCollission_FighterAsteroid();
+	void onAsteroidsExtinction();
+
+	Uint8 winner_; //0 - Ninguno, 1 - Asteroides, 2 - Jugador
 
 	std::array<unsigned int, 2> score_;
 	State state_;

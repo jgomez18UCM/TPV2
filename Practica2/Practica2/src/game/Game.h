@@ -13,7 +13,9 @@ class PaddlesSystem;
 class GameCtrlSystem;
 class CollisionsSystem;
 class RenderSystem;
-
+class AsteroidsSystem;
+class BulletsSystem;
+class FighterSystem;
 
 class Game {
 public:
@@ -29,5 +31,8 @@ private:
 	GameCtrlSystem *gameCtrlSys_;
 	CollisionsSystem *collisionsSys_;
 	RenderSystem *renderSys_;
+	AsteroidsSystem* asteroidsSys_;
+	BulletsSystem* bulletsSys_;
+	FighterSystem* fighterSys_;
 };
 

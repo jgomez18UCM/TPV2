@@ -13,17 +13,27 @@
 	_STOPONBORDER, \
 	_BOUNCEONBORDER, \
 	_GAMESTATE, \
-	_GAMEINFOMSGS
+	_GAMEINFOMSGS,\
+	_DEACCELERATION, \
+	_GUN, \
+	_GENERATIONS,\
+	_FOLLOW,\
+	_BORDERINTERACTION,\
+	_HEALTH
+
 
 // Groups list - must have at least one element
 //
 #define _GRPS_LIST_ \
-	_grp_PADDLES
+	_grp_PADDLES,\
+	_grp_BULLETS,\
+	_grp_ASTEROIDS
 
 // Handlers list - must have at least one element
 //
 #define _HDLRS_LIST_ \
-	_hdlr_BALL
+	_hdlr_BALL,\
+	_hdlr_FIGHTER
 
 // Systems list - must have at least one element
 //
@@ -36,4 +46,5 @@
 	_SYS_FIGHTER, \
 	_SYS_ASTEROIDS, \
 	_SYS_BULLETS
+
 

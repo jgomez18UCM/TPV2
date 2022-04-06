@@ -2,6 +2,7 @@
 
 #pragma once
 #include "../ecs/System.h"
+#include "../sdlutils/SDLUtils.h"
 
 class RenderSystem: public ecs::System {
 public:
@@ -19,6 +20,12 @@ private:
 	void drawBall();
 	void drawPaddles();
 
+	void onRoundStart();
+	void onRoundOver();
+	void onGameStart();
+	void onGameOver();
 
+	Uint8 winner_; //0 - Ninguno, 1 - Asteroides, 2 - Jugador
+	Uint8 state_; //Estado actual del juego
 };
 
