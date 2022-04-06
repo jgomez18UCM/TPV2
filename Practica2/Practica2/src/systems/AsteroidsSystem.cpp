@@ -34,9 +34,11 @@ void AsteroidsSystem::initSystem()
 
 void AsteroidsSystem::update()
 {
-	for (ecs::Entity* a : mngr_->getEntities(ecs::_grp_ASTEROIDS)) {
-		//Seguimiento si es tipo B
-		mngr_->getComponent<Transform>(a)->move();
+	if (active_) {
+		for (ecs::Entity* a : mngr_->getEntities(ecs::_grp_ASTEROIDS)) {
+			//Seguimiento si es tipo B
+			mngr_->getComponent<Transform>(a)->move();
+		}
 	}
 }
 

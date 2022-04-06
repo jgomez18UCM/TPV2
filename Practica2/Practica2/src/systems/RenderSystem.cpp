@@ -6,6 +6,8 @@
 #include "../components/Image.h"
 #include "../components/RectangleViewer.h"
 #include "../components/Transform.h"
+#include "../components/FramedImage.h"
+#include "../components/Health.h"
 #include "../ecs/Manager.h"
 #include "../sdlutils/macros.h"
 #include "../sdlutils/SDLUtils.h"
@@ -23,9 +25,12 @@ void RenderSystem::initSystem() {
 
 void RenderSystem::update() {
 	drawMsgs();
-	drawScore();
-	drawBall();
-	drawPaddles();
+	if (state_ == GameCtrlSystem::RUNNING) {
+		drawBall();
+		drawPaddles();
+		drawFighter();
+		drawAsteroids();
+	}
 }
 
 void RenderSystem::drawMsgs() {
@@ -36,36 +41,24 @@ void RenderSystem::drawMsgs() {
 
 		// game over message
 		if (state == GameCtrlSystem::GAMEOVER) {
-			auto &t = sdlutils().msgs().at("gameover");
+			auto &t = sdlutils().msgs().at(winner_ == 1 ? "gameover" : "win");
 			t.render((sdlutils().width() - t.width()) / 2,
 					(sdlutils().height() - t.height()) / 2);
 		}
 
 		// new game message
 		if (state == GameCtrlSystem::NEWGAME) {
-			auto &t = sdlutils().msgs().at("start");
+			auto &t = sdlutils().msgs().at("newgame");
 			t.render((sdlutils().width() - t.width()) / 2,
 					sdlutils().height() / 2 + t.height() * 2);
 		} else {
-			auto &t = sdlutils().msgs().at("continue");
+			auto &t = sdlutils().msgs().at("paused");
 			t.render((sdlutils().width() - t.width()) / 2,
 					sdlutils().height() / 2 + t.height() * 2);
 		}
 	}
 }
 
-void RenderSystem::drawScore() {
-
-	auto leftScore = mngr_->getSystem<GameCtrlSystem>()->getScore(0);
-	auto rightScore = mngr_->getSystem<GameCtrlSystem>()->getScore(1);
-
-	Texture scoreMsg(
-			sdlutils().renderer(), //
-			std::to_string(leftScore) + " - " + std::to_string(rightScore),
-			sdlutils().fonts().at("ARIAL16"), build_sdlcolor(0xffffffff));
-	scoreMsg.render((sdlutils().width() - scoreMsg.width()) / 2, 10);
-
-}
 
 void RenderSystem::drawBall() {
 	auto ball = mngr_->getHandler(ecs::_hdlr_BALL);
@@ -90,4 +83,51 @@ void RenderSystem::drawPaddles() {
 		mngr_->getComponent<RectangleViewer>(e)->draw(sdlutils().renderer(),
 				dest);
 	}
+}
+
+void RenderSystem::drawFighter()
+{
+	auto player = mngr_->getHandler(ecs::_hdlr_FIGHTER);
+	mngr_->getComponent<Image>(player)->render();
+}
+
+void RenderSystem::drawAsteroids()
+{
+	for (auto a : mngr_->getEntities(ecs::_grp_ASTEROIDS)) {
+		mngr_->getComponent<FramedImage>(a)->render();
+		mngr_->getComponent<FramedImage>(a)->update();
+	}
+}
+
+void RenderSystem::drawBullets()
+{
+	for (auto b : mngr_->getEntities(ecs::_grp_BULLETS)) {
+		mngr_->getComponent<Image>(b)->render();
+	}
+}
+
+void RenderSystem::drawHealth()
+{
+	mngr_->getComponent<Health>(mngr_->getHandler(ecs::_hdlr_FIGHTER))->render();
+}
+
+void RenderSystem::onRoundStart()
+{
+	state_ = GameCtrlSystem::RUNNING;
+}
+
+void RenderSystem::onRoundOver()
+{
+	state_ = GameCtrlSystem::PAUSED;
+}
+
+void RenderSystem::onGameStart()
+{
+	state_ = GameCtrlSystem::RUNNING;
+}
+
+void RenderSystem::onGameOver()
+{
+	state_ = GameCtrlSystem::GAMEOVER;
+	winner_ = mngr_->getSystem<GameCtrlSystem>()->getWinner();
 }

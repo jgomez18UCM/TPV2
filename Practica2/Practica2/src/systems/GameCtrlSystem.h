@@ -34,13 +34,15 @@ public:
 		return state_;
 	}
 
+	bool getWinner() { return winner_; };
+
 	inline unsigned int getScore(std::size_t player) {
 		return score_[player];
 	}
 
 	void update() override;
 	void recieve(const Message&) override;
-
+	
 
 
 private:

@@ -16,9 +16,12 @@ public:
 
 private:
 	void drawMsgs();
-	void drawScore();
 	void drawBall();
 	void drawPaddles();
+	void drawFighter();
+	void drawAsteroids();
+	void drawBullets();
+	void drawHealth();
 
 	void onRoundStart();
 	void onRoundOver();
