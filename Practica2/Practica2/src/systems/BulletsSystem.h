@@ -6,8 +6,8 @@ class BulletsSystem : public ecs::System
 public:
 	__SYSID_DECL__(ecs::_SYS_BULLETS)
 
-		BulletsSystem() {};
-	virtual ~BulletsSystem() {};
+	BulletsSystem();
+	virtual ~BulletsSystem();
 
 	void recieve(const Message& m) override;
 	void initSystem() override;

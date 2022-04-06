@@ -19,7 +19,7 @@ void Follow::initComponent()
 	assert(tr_ != nullptr && player_ != nullptr);
 }
 
-void Follow::update()
+void Follow::follow()
 {
 	auto& mVel = tr_->vel_;
 	auto playerPos = player_->pos_;

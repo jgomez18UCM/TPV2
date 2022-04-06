@@ -10,7 +10,7 @@ public:
 	Follow();
 	~Follow();
 	void initComponent() override;
-	void update() override;
+	void follow();
 protected:
 	Transform* tr_;
 	Transform* player_;

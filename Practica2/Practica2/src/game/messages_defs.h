@@ -13,7 +13,10 @@ enum msgId : msgId_type {
 	_m_GAME_OVER, //
 	_m_NEW_GAME, //
 	_m_BALL_EXIT, //
-	_m_BALL_HIT_PADDLE
+	_m_BALL_HIT_PADDLE,
+	_m_COLLISSION_ASTEROID_FIGHTER,
+	_m_COLLISSION_ASTEROID_BULLET,
+	_m_SHOOT
 };
 
 
@@ -31,22 +34,18 @@ struct Message {
 		} ball_hit_paddle;
 
 		struct {
-			ecs::Entity* a;
 			ecs::Entity* b;
-		} collision_bullet_asteroid;
-		
+			ecs::Entity* a;
+		} collission_asteroid_bullet;
+
 		struct {
-			Vector2D pos;
-			Vector2D vel;
+			double posX;
+			double posY;
+			double velX;
+			double velY;
 			double width;
 			double height;
 		} shoot;
 
-		struct {} round_over;
-		struct {} round_start;
-		struct {} game_start;
-		struct {} game_over;
-		struct {} collision_fighter_asteroid;
-		struct {} asteroids_extintion;
 	};
 };
