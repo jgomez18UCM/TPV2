@@ -38,21 +38,21 @@ void Game::init() {
 
 	// Initialize the SDLUtils singleton
 	SDLUtils::init("Ping Pong", 800, 600,
-			"resources/config/pingpong.resources.json");
+			"resources/config/asteroid.resources.json");
 
 	sdlutils().hideCursor();
 
 	// Create the manager
 	mngr_ = new Manager();
 
-	ballSys_ = mngr_->addSystem<BallSystem>();
-	paddlesSys_ = mngr_->addSystem<PaddlesSystem>();
+	//ballSys_ = mngr_->addSystem<BallSystem>();
+	//paddlesSys_ = mngr_->addSystem<PaddlesSystem>();
 	gameCtrlSys_ = mngr_->addSystem<GameCtrlSystem>();
 	collisionsSys_ = mngr_->addSystem<CollisionsSystem>();
 	renderSys_ = mngr_->addSystem<RenderSystem>();
-	/*asteroidsSys_ = mngr_->addSystem<AsteroidsSystem>();
+	asteroidsSys_ = mngr_->addSystem<AsteroidsSystem>();
 	bulletsSys_ = mngr_->addSystem<BulletsSystem>();
-	fighterSys_ = mngr_->addSystem<FighterSystem>();*/
+	fighterSys_ = mngr_->addSystem<FighterSystem>();
 
 }
 
@@ -74,13 +74,14 @@ void Game::start() {
 			continue;
 		}
 
+		mngr_->flushMessages();
 		mngr_->refresh();
 
-		/*fighterSys_->update();*/
-		ballSys_->update();
-		paddlesSys_->update();
-		/*asteroidsSys_->update();
-		bulletsSys_->update();*/
+		fighterSys_->update();
+		/*ballSys_->update();
+		paddlesSys_->update();*/
+		asteroidsSys_->update();
+		bulletsSys_->update();
 		collisionsSys_->update();
 		gameCtrlSys_->update();
 		

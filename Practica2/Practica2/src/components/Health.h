@@ -11,7 +11,7 @@ public:
 	Health(int maxHealth, Texture* tex);
 	~Health();
 	void initComponent() override;
-	void render() override;
+	void draw();
 	void getDamage(int damage);
 	int getHealth();
 	void resetHealth();

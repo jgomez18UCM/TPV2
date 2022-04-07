@@ -2,6 +2,9 @@
 #include "../ecs/Manager.h"
 #include "../ecs/Entity.h"
 #include "../components/Transform.h"
+#include "../components/DisableOnExit.h"
+#include "../components/Image.h"
+#include "../sdlutils/SDLUtils.h"
 
 BulletsSystem::BulletsSystem() : active_(false)
 {
@@ -40,6 +43,7 @@ void BulletsSystem::update()
 	if (active_) {
 		for (ecs::Entity* b : mngr_->getEntities(ecs::_grp_BULLETS)) {
 			mngr_->getComponent<Transform>(b)->move();
+			mngr_->getComponent<DisableOnExit>(b)->check();
 		}
 	}
 }
@@ -49,6 +53,8 @@ void BulletsSystem::shoot(Vector2D pos, Vector2D vel, double width, double heigh
 	auto bullet = mngr_->addEntity(ecs::_grp_BULLETS);
 	auto bulletTr = mngr_->addComponent<Transform>(bullet);
 	bulletTr->init(pos, vel, width, height, vel.angle(Vector2D(0, -1)));
+	mngr_->addComponent<DisableOnExit>(bullet);
+	mngr_->addComponent<Image>(bullet, &sdlutils().images().at("bullet"));
 }
 
 void BulletsSystem::onCollision_BulletAsteroid(ecs::Entity* b)

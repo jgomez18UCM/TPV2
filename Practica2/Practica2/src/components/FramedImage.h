@@ -18,8 +18,8 @@ public:
 	}
 
 	void initComponent() override;
-	void render() override;
-	void update() override;
+	void draw();
+	void updateFrame();
 
 private:
 	Transform* tr_;

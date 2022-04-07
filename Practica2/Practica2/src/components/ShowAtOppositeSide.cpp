@@ -21,7 +21,7 @@ void ShowAtoppositeSide::initComponent() {
 	assert(tr_ != nullptr);
 }
 
-void ShowAtoppositeSide::update() {
+void ShowAtoppositeSide::check() {
 	auto &pos = tr_->pos_;
 	auto &vel = tr_->vel_;
 	auto width = tr_->width_;

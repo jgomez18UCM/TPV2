@@ -102,9 +102,9 @@ void PaddlesSystem::moveWithKeyboard(PaddleCtrl *paddleCtrl,
 	if (ihdlr.keyDownEvent()) {
 		if (ihdlr.isKeyDown(paddleCtrl->up_)) {
 			paddleTr->vel_.setY(-paddleCtrl->speed_);
-		} else if (ihdlr.isKeyDown(paddleCtrl->down_)) {
+		} else if (ihdlr.isKeyDown(paddleCtrl->left_)) {
 			paddleTr->vel_.setY(paddleCtrl->speed_);
-		} else if (ihdlr.isKeyDown(paddleCtrl->stop_)) {
+		} else if (ihdlr.isKeyDown(paddleCtrl->right_)) {
 			paddleTr->vel_.setY(0.0f);
 		}
 	}

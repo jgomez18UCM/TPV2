@@ -20,7 +20,7 @@ void Health::initComponent()
 	tr_ = mngr_->getComponent<Transform>(ent_);
 }
 
-void Health::render()
+void Health::draw()
 {
 	SDL_Rect dst = build_sdlrect(0, 0, tr_->width_, tr_->height_);
 	for (int i = 0; i < health_; i++) {

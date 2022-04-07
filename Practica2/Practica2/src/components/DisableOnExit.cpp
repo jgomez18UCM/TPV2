@@ -18,7 +18,7 @@ void DisableOnExit::initComponent()
 	assert(tr_ != nullptr);
 }
 
-void DisableOnExit::update()
+void DisableOnExit::check()
 {
 	auto& pos = tr_->pos_;
 	auto width = tr_->width_;

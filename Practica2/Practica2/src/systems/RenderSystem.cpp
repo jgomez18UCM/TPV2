@@ -20,6 +20,26 @@ RenderSystem::RenderSystem() {
 RenderSystem::~RenderSystem() {
 }
 
+void RenderSystem::recieve(const Message& m)
+{
+	switch (m.id) {
+		case _m_ROUND_OVER:
+			onRoundOver();
+			break;
+		case _m_ROUND_START:
+			onRoundStart();
+			break;
+		case _m_GAME_OVER:
+			onGameOver();
+			break;
+		case _m_GAME_START:
+			onGameStart();
+			break;
+		default:
+			break;
+	}
+}
+
 void RenderSystem::initSystem() {
 }
 
@@ -30,6 +50,7 @@ void RenderSystem::update() {
 		drawPaddles();
 		drawFighter();
 		drawAsteroids();
+		drawBullets();
 	}
 }
 
@@ -88,27 +109,39 @@ void RenderSystem::drawPaddles() {
 void RenderSystem::drawFighter()
 {
 	auto player = mngr_->getHandler(ecs::_hdlr_FIGHTER);
-	mngr_->getComponent<Image>(player)->render();
+	auto playerTr = mngr_->getComponent<Transform>(player);
+	auto playerImg = mngr_->getComponent<Image>(player)->tex_;
+
+	SDL_Rect dst = build_sdlrect(playerTr->pos_, playerTr->width_, playerTr->width_);
+	
+	assert(playerImg != nullptr);
+	playerImg->render(dst, playerTr->rot_);
 }
 
 void RenderSystem::drawAsteroids()
 {
 	for (auto a : mngr_->getEntities(ecs::_grp_ASTEROIDS)) {
-		mngr_->getComponent<FramedImage>(a)->render();
-		mngr_->getComponent<FramedImage>(a)->update();
+		mngr_->getComponent<FramedImage>(a)->draw();
+		mngr_->getComponent<FramedImage>(a)->updateFrame();
 	}
 }
 
 void RenderSystem::drawBullets()
 {
 	for (auto b : mngr_->getEntities(ecs::_grp_BULLETS)) {
-		mngr_->getComponent<Image>(b)->render();
+		auto bulletTr = mngr_->getComponent<Transform>(b);
+		auto bulletImg = mngr_->getComponent<Image>(b)->tex_;
+
+		SDL_Rect dst = build_sdlrect(bulletTr->pos_, bulletTr->width_, bulletTr->width_);
+
+		assert(bulletImg != nullptr);
+		bulletImg->render(dst, bulletTr->rot_);
 	}
 }
 
 void RenderSystem::drawHealth()
 {
-	mngr_->getComponent<Health>(mngr_->getHandler(ecs::_hdlr_FIGHTER))->render();
+	mngr_->getComponent<Health>(mngr_->getHandler(ecs::_hdlr_FIGHTER))->draw();
 }
 
 void RenderSystem::onRoundStart()
@@ -123,7 +156,7 @@ void RenderSystem::onRoundOver()
 
 void RenderSystem::onGameStart()
 {
-	state_ = GameCtrlSystem::RUNNING;
+	state_ = GameCtrlSystem::NEWGAME;
 }
 
 void RenderSystem::onGameOver()

@@ -10,7 +10,7 @@ public:
 	DisableOnExit();
 	~DisableOnExit();
 	void initComponent() override;
-	void update() override;
+	void check();
 protected:
 	Transform* tr_;
 };

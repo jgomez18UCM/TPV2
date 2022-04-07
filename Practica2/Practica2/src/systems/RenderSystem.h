@@ -11,6 +11,7 @@ public:
 
 	RenderSystem();
 	virtual ~RenderSystem();
+	void recieve(const Message& m) override;
 	void initSystem() override;
 	void update() override;
 

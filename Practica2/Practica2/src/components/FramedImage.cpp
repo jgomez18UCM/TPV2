@@ -24,7 +24,7 @@ void FramedImage::initComponent()
 	assert(tr_ != nullptr);
 }
 
-void FramedImage::render()
+void FramedImage::draw()
 {
 	SDL_Rect dest = build_sdlrect(tr_->pos_.getX(), tr_->pos_.getY(), tr_->width_,
 		tr_->height_);
@@ -35,7 +35,7 @@ void FramedImage::render()
 	tex_->render(src, dest );			
 }
 
-void FramedImage::update()
+void FramedImage::updateFrame()
 {
 	if (lastUpdate_ + 50 > sdlutils().currRealTime()) {
 		return;

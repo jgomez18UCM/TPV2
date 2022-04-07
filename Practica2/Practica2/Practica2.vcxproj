@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClInclude Include="src\components\DeAcceleration.h" />
     <ClInclude Include="src\components\DisableOnExit.h" />
+    <ClInclude Include="src\components\FighterCtrl.h" />
     <ClInclude Include="src\components\Follow.h" />
     <ClInclude Include="src\components\FramedImage.h" />
     <ClInclude Include="src\components\Generations.h" />

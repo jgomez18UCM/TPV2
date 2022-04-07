@@ -11,10 +11,6 @@ public:
 	DeAcceleration();
 	DeAcceleration(float deAcc);
 	virtual ~DeAcceleration();
-	void initComponent() override;
-	void update() override;
-private:
-	Transform* tr_;
 	float deAcc_;
 };
 

@@ -13,7 +13,7 @@ public:
 	ShowAtoppositeSide();
 	virtual ~ShowAtoppositeSide();
 	void initComponent() override;
-	void update() override;
+	void check();
 private:
 	Transform *tr_;
 };
