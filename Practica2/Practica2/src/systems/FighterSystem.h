@@ -17,6 +17,7 @@ private:
 	void onCollission_FighterAsteroid();
 	void onRoundOver();
 	void onRoundStart();
+	void onNewgame();
 
 	ecs::Entity* player_;
 	Uint32 lastShot_;

@@ -1,5 +1,6 @@
 #pragma once
 #include "../ecs/System.h"
+#include "../sdlutils/SDLUtils.h"
 class AsteroidsSystem : public ecs::System
 {
 public:
@@ -23,5 +24,7 @@ private:
 	int numOfAsteroids_;
 	int limitAsteroids_;
 	bool active_;
+	Uint32 lastSpawn_;
+	Uint32 spawnCd_;
 };
 

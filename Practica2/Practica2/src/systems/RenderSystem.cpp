@@ -13,8 +13,9 @@
 #include "../sdlutils/SDLUtils.h"
 #include "../sdlutils/Texture.h"
 #include "GameCtrlSystem.h"
+#include <iostream>
 
-RenderSystem::RenderSystem() {
+RenderSystem::RenderSystem() : state_(GameCtrlSystem::NEWGAME), winner_(0) {
 }
 
 RenderSystem::~RenderSystem() {
@@ -30,9 +31,9 @@ void RenderSystem::recieve(const Message& m)
 			onRoundStart();
 			break;
 		case _m_GAME_OVER:
-			onGameOver();
+			onGameOver(m.game_over.winner);
 			break;
-		case _m_GAME_START:
+		case _m_NEW_GAME:
 			onGameStart();
 			break;
 		default:
@@ -46,29 +47,26 @@ void RenderSystem::initSystem() {
 void RenderSystem::update() {
 	drawMsgs();
 	if (state_ == GameCtrlSystem::RUNNING) {
-		drawBall();
-		drawPaddles();
 		drawFighter();
 		drawAsteroids();
 		drawBullets();
+		drawHealth();
 	}
 }
 
 void RenderSystem::drawMsgs() {
-	auto state = mngr_->getSystem<GameCtrlSystem>()->getState();
 
 	// message when game is not running
-	if (state != GameCtrlSystem::RUNNING) {
+	if (state_ != GameCtrlSystem::RUNNING) {
 
 		// game over message
-		if (state == GameCtrlSystem::GAMEOVER) {
+		if (state_ == GameCtrlSystem::GAMEOVER) {
 			auto &t = sdlutils().msgs().at(winner_ == 1 ? "gameover" : "win");
 			t.render((sdlutils().width() - t.width()) / 2,
 					(sdlutils().height() - t.height()) / 2);
 		}
-
 		// new game message
-		if (state == GameCtrlSystem::NEWGAME) {
+		else if (state_ == GameCtrlSystem::NEWGAME) {
 			auto &t = sdlutils().msgs().at("newgame");
 			t.render((sdlutils().width() - t.width()) / 2,
 					sdlutils().height() / 2 + t.height() * 2);
@@ -77,32 +75,6 @@ void RenderSystem::drawMsgs() {
 			t.render((sdlutils().width() - t.width()) / 2,
 					sdlutils().height() / 2 + t.height() * 2);
 		}
-	}
-}
-
-
-void RenderSystem::drawBall() {
-	auto ball = mngr_->getHandler(ecs::_hdlr_BALL);
-	auto ballTr = mngr_->getComponent<Transform>(ball);
-	auto ballImg = mngr_->getComponent<Image>(ball);
-
-	SDL_Rect dest = build_sdlrect(ballTr->pos_, ballTr->width_,
-			ballTr->height_);
-
-	assert(ballImg->tex_ != nullptr);
-	ballImg->tex_->render(dest, ballTr->rot_);
-
-}
-
-void RenderSystem::drawPaddles() {
-	for (auto e : mngr_->getEntities(ecs::_grp_PADDLES)) {
-		auto paddleTr_ = mngr_->getComponent<Transform>(e);
-
-		SDL_Rect dest = build_sdlrect(paddleTr_->pos_.getX(),
-				paddleTr_->pos_.getY(), paddleTr_->width_, paddleTr_->height_);
-
-		mngr_->getComponent<RectangleViewer>(e)->draw(sdlutils().renderer(),
-				dest);
 	}
 }
 
@@ -132,7 +104,7 @@ void RenderSystem::drawBullets()
 		auto bulletTr = mngr_->getComponent<Transform>(b);
 		auto bulletImg = mngr_->getComponent<Image>(b)->tex_;
 
-		SDL_Rect dst = build_sdlrect(bulletTr->pos_, bulletTr->width_, bulletTr->width_);
+		SDL_Rect dst = build_sdlrect(bulletTr->pos_, bulletTr->width_, bulletTr->height_);
 
 		assert(bulletImg != nullptr);
 		bulletImg->render(dst, bulletTr->rot_);
@@ -150,7 +122,7 @@ void RenderSystem::onRoundStart()
 }
 
 void RenderSystem::onRoundOver()
-{
+ {
 	state_ = GameCtrlSystem::PAUSED;
 }
 
@@ -159,8 +131,8 @@ void RenderSystem::onGameStart()
 	state_ = GameCtrlSystem::NEWGAME;
 }
 
-void RenderSystem::onGameOver()
+void RenderSystem::onGameOver(int winner)
 {
 	state_ = GameCtrlSystem::GAMEOVER;
-	winner_ = mngr_->getSystem<GameCtrlSystem>()->getWinner();
+	winner_ = winner;
 }

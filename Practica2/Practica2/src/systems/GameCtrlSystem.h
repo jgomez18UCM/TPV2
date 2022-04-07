@@ -14,12 +14,6 @@ public:
 
 	__SYSID_DECL__(ecs::_sys_GAMECTRL)
 
-
-	enum Side : uint8_t {
-		LEFT = 0, //
-		RIGHT
-	};
-
 	enum State {
 		NEWGAME = 0, // just before starting a new game
 		PAUSED, // between rounds
@@ -35,32 +29,21 @@ public:
 	}
 
 	bool getWinner() { return winner_; };
-
-	inline unsigned int getScore(std::size_t player) {
-		return score_[player];
-	}
-
 	void update() override;
 	void recieve(const Message&) override;
 	
-
-
 private:
 
-	void onBallExit(Side side);
 	void startRound();
 	void startGame();
 	void roundOver();
-	void gameOver();
+	void gameOver(int winner);
 
 	void onCollission_FighterAsteroid();
 	void onAsteroidsExtinction();
 
 	Uint8 winner_; //0 - Ninguno, 1 - Asteroides, 2 - Jugador
-
-	std::array<unsigned int, 2> score_;
 	State state_;
-	const unsigned int maxScore_;
 
 };
 

@@ -5,10 +5,8 @@
 #include "../ecs/Manager.h"
 #include "../sdlutils/InputHandler.h"
 #include "../sdlutils/SDLUtils.h"
-#include "../systems/BallSystem.h"
 #include "../systems/CollisionsSystem.h"
 #include "../systems/GameCtrlSystem.h"
-#include "../systems/PaddlesSystem.h"
 #include "../systems/RenderSystem.h"
 #include "../systems/AsteroidsSystem.h"
 #include "../systems/BulletsSystem.h"
@@ -45,8 +43,6 @@ void Game::init() {
 	// Create the manager
 	mngr_ = new Manager();
 
-	//ballSys_ = mngr_->addSystem<BallSystem>();
-	//paddlesSys_ = mngr_->addSystem<PaddlesSystem>();
 	gameCtrlSys_ = mngr_->addSystem<GameCtrlSystem>();
 	collisionsSys_ = mngr_->addSystem<CollisionsSystem>();
 	renderSys_ = mngr_->addSystem<RenderSystem>();
@@ -74,20 +70,22 @@ void Game::start() {
 			continue;
 		}
 
-		mngr_->flushMessages();
+		//mngr_->flushMessages();
 		mngr_->refresh();
+		
 
 		fighterSys_->update();
-		/*ballSys_->update();
-		paddlesSys_->update();*/
 		asteroidsSys_->update();
 		bulletsSys_->update();
 		collisionsSys_->update();
 		gameCtrlSys_->update();
 		
+		mngr_->flushMessages();
 		sdlutils().clearRenderer();
 		renderSys_->update();
 		sdlutils().presentRenderer();
+
+		
 
 		Uint32 frameTime = sdlutils().currRealTime() - startTime;
 		 

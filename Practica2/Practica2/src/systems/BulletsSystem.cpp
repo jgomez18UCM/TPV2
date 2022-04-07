@@ -27,7 +27,7 @@ void BulletsSystem::recieve(const Message& m)
 			onCollision_BulletAsteroid(m.collission_asteroid_bullet.b);
 			break;
 		case _m_SHOOT:
-			shoot(Vector2D(m.shoot.posX, m.shoot.posY), Vector2D(m.shoot.velX, m.shoot.posX), m.shoot.width, m.shoot.height);
+			shoot(Vector2D(m.shoot.posX, m.shoot.posY), Vector2D(m.shoot.velX, m.shoot.velY), m.shoot.width, m.shoot.height);
 			break;
 		default:
 			break;
@@ -52,7 +52,7 @@ void BulletsSystem::shoot(Vector2D pos, Vector2D vel, double width, double heigh
 {
 	auto bullet = mngr_->addEntity(ecs::_grp_BULLETS);
 	auto bulletTr = mngr_->addComponent<Transform>(bullet);
-	bulletTr->init(pos, vel, width, height, vel.angle(Vector2D(0, -1)));
+	bulletTr->init(pos, vel, width, height, -vel.angle(Vector2D(0, -1)));
 	mngr_->addComponent<DisableOnExit>(bullet);
 	mngr_->addComponent<Image>(bullet, &sdlutils().images().at("bullet"));
 }

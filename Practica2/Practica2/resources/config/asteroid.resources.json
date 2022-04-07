@@ -79,7 +79,7 @@
     {
       "id": "win",
       "text": "You Win!, press SPACE to restart",
-      "font": "ARIAL16",
+      "font": "ARIAL48",
       "color": "0x00ff00ff"
     }
   ],

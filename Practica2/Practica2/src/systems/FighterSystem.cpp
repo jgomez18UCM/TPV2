@@ -30,6 +30,9 @@ void FighterSystem::recieve(const Message& m)
 		case _m_ROUND_START:
 			onRoundStart();
 			break;
+		case _m_NEW_GAME:
+			onNewgame();
+			break;
 		default:
 			break;
 	}
@@ -64,7 +67,6 @@ void FighterSystem::update()
 		if (ihdlr.isKeyDown(playerCtrl->up_)) {
 			auto& s = sdlutils().soundEffects().at("thrust");
 			s.play();
-			std::cout << "acelerando" << std::endl;
 
 			Vector2D newVel = vel + Vector2D(0, -1).rotate(rot) * mngr_->getComponent<FighterCtrl>(player_)->thrust_;
 			// add 1.0f to the speed (respecting the limit 3.0f). Recall
@@ -78,10 +80,10 @@ void FighterSystem::update()
 			//
 			vel = Vector2D(0, -speed).rotate(rot);
 		}
-		else if (ihdlr.isKeyDown(playerCtrl->left_)) {
+		if (ihdlr.isKeyDown(playerCtrl->left_)) {
 			rot-=5.0f;
 		}
-		else if (ihdlr.isKeyDown(playerCtrl->right_)) {
+		if (ihdlr.isKeyDown(playerCtrl->right_)) {
 			rot+=5.0f;
 		}
 		if (ihdlr.isKeyDown(playerCtrl->shoot_)) {
@@ -98,7 +100,7 @@ void FighterSystem::update()
 				m.shoot.velY = bulletVel.getY();
 				m.shoot.width = 5.0f;
 				m.shoot.height = 20.0f;
-				mngr_->send(m, true);
+				mngr_->send(m);
 				lastShot_ = sdlutils().currRealTime();
 				sdlutils().soundEffects().at("gunshot").play();
 			}
@@ -116,10 +118,6 @@ void FighterSystem::onCollission_FighterAsteroid()
 	auto Tr = mngr_->getComponent<Transform>(player_);
 	Tr->pos_.set((sdlutils().width() - Tr->width_) / 2.0f + 100, (sdlutils().height() - Tr->height_) / 2.0f);
 	Tr->vel_.set(0, 0);
-	
-	Message m;
-	m.id =  _m_ROUND_OVER;
-	mngr_->send(m);
 }
 
 void FighterSystem::onRoundOver()
@@ -130,4 +128,9 @@ void FighterSystem::onRoundOver()
 void FighterSystem::onRoundStart()
 {
 	active_ = true;
+}
+
+void FighterSystem::onNewgame()
+{
+	mngr_->getComponent<Health>(mngr_->getHandler(ecs::_hdlr_FIGHTER))->resetHealth();
 }

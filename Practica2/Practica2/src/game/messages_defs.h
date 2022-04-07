@@ -8,15 +8,13 @@
 using msgId_type = uint8_t;
 enum msgId : msgId_type {
 	_m_ROUND_START, //
-	_m_ROUND_OVER, //
-	_m_GAME_START, //
+	_m_ROUND_OVER, //     
 	_m_GAME_OVER, //
 	_m_NEW_GAME, //
-	_m_BALL_EXIT, //
-	_m_BALL_HIT_PADDLE,
 	_m_COLLISSION_ASTEROID_FIGHTER,
 	_m_COLLISSION_ASTEROID_BULLET,
-	_m_SHOOT
+	_m_SHOOT,
+	_m_ASTEROID_EXTINCTION
 };
 
 
@@ -24,14 +22,6 @@ struct Message {
 	msgId_type id;
 
 	union {
-
-		struct {
-			uint8_t side;
-		} ball_exit;
-
-		struct {
-			ecs::Entity *e;
-		} ball_hit_paddle;
 
 		struct {
 			ecs::Entity* b;
@@ -47,5 +37,8 @@ struct Message {
 			double height;
 		} shoot;
 
+		struct {
+			int winner;
+		} game_over;
 	};
 };

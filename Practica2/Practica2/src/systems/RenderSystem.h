@@ -17,8 +17,6 @@ public:
 
 private:
 	void drawMsgs();
-	void drawBall();
-	void drawPaddles();
 	void drawFighter();
 	void drawAsteroids();
 	void drawBullets();
@@ -27,7 +25,7 @@ private:
 	void onRoundStart();
 	void onRoundOver();
 	void onGameStart();
-	void onGameOver();
+	void onGameOver(int winner);
 
 	Uint8 winner_; //0 - Ninguno, 1 - Asteroides, 2 - Jugador
 	Uint8 state_; //Estado actual del juego

@@ -6,13 +6,13 @@
 #include "../components/Generations.h"
 #include "../components/FramedImage.h"
 #include "../components/ShowAtOppositeSide.h"
-#include "../sdlutils/SDLUtils.h"
 
-AsteroidsSystem::AsteroidsSystem() : numOfAsteroids_(0), active_(false), limitAsteroids_(30)
+
+AsteroidsSystem::AsteroidsSystem() : numOfAsteroids_(0), active_(false), limitAsteroids_(30), spawnCd_(5000), lastSpawn_()
 {
 }
 
-AsteroidsSystem::AsteroidsSystem(int limit) : numOfAsteroids_(0), active_(false), limitAsteroids_(limit)
+AsteroidsSystem::AsteroidsSystem(int limit) : numOfAsteroids_(0), active_(false), limitAsteroids_(limit), spawnCd_(5000), lastSpawn_()
 {
 }
 
@@ -22,6 +22,12 @@ void AsteroidsSystem::recieve(const Message& m)
 	{
 		case _m_COLLISSION_ASTEROID_BULLET:	
 			onCollission_AsteroidBullet(m.collission_asteroid_bullet.a);
+			break;
+		case _m_ROUND_START:
+			onRoundStart();
+			break;
+		case _m_ROUND_OVER:
+			onRoundOver();
 			break;
 		default:
 			break;
@@ -41,12 +47,26 @@ void AsteroidsSystem::update()
 			mngr_->getComponent<Transform>(a)->move();
 			mngr_->getComponent<ShowAtoppositeSide>(a)->check();
 		}
+
+		if (numOfAsteroids_ <= 0) {
+			Message m;
+			m.id = _m_ASTEROID_EXTINCTION;
+			mngr_->send(m);
+		}
+
+		if (lastSpawn_ + spawnCd_ <= sdlutils().currRealTime()) {
+			generateNewAsteroid(sdlutils().rand().nextInt(0,101)<=30);
+			lastSpawn_ = sdlutils().currRealTime();
+		}
 	}
 }
 
 void AsteroidsSystem::onCollission_AsteroidBullet(ecs::Entity* a)
 {
-	divideAsteroid(a);
+	if (mngr_->getComponent<Generations>(a)->getGenerations() > 1) {
+		divideAsteroid(a);
+		divideAsteroid(a);
+	}
 	mngr_->setAlive(a, false);
 	numOfAsteroids_--;
 }
@@ -64,6 +84,7 @@ void AsteroidsSystem::onRoundStart()
 {
 	active_ = true;
 	generateAsteroidsStart(10);
+	lastSpawn_ = sdlutils().currRealTime();
 }
 
 void AsteroidsSystem::generateAsteroidsStart(int n)

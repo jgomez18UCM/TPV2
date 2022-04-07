@@ -2,15 +2,11 @@
 
 #include "GameCtrlSystem.h"
 
-#include "../components/GameState.h"
+#include "../components/Health.h"
 #include "../ecs/Manager.h"
 #include "../sdlutils/InputHandler.h"
 #include "../sdlutils/SDLUtils.h"
-#include "BallSystem.h"
-GameCtrlSystem::GameCtrlSystem() :
-		score_(), //
-		state_(NEWGAME), //
-		maxScore_(5) {
+GameCtrlSystem::GameCtrlSystem() : state_(NEWGAME), winner_(0) {
 }
 
 GameCtrlSystem::~GameCtrlSystem() {
@@ -39,28 +35,14 @@ void GameCtrlSystem::update() {
 }
 
 
-void GameCtrlSystem::onBallExit(Side side) {
-
-	assert(state_ == RUNNING); // this should be called only when game is running
-
-	if (side == LEFT) {
-		score_[1]++;
-	} else {
-		score_[0]++;
-	}
-
-
-	if (score_[0] < maxScore_ && score_[1] < maxScore_) {
-		roundOver();
-	} else {
-		gameOver();
-	}
-}
 
 void GameCtrlSystem::recieve(const Message &m) {
 	switch (m.id) {
-	case _m_BALL_EXIT:
-		onBallExit(static_cast<Side>(m.ball_exit.side));
+	case _m_ASTEROID_EXTINCTION:
+		onAsteroidsExtinction();
+		break;
+	case _m_COLLISSION_ASTEROID_FIGHTER:
+		onCollission_FighterAsteroid();
 		break;
 	default:
 		break;
@@ -77,8 +59,6 @@ void GameCtrlSystem::startRound() {
 void GameCtrlSystem::startGame() {
 	Message m;
 	state_ = NEWGAME;
-	score_[0] = 0;
-	score_[1] = 0;
 	m.id = _m_NEW_GAME;
 	mngr_->send(m);
 }
@@ -90,11 +70,30 @@ void GameCtrlSystem::roundOver() {
 	mngr_->send(m);
 }
 
-void GameCtrlSystem::gameOver() {
-	Message m;
+void GameCtrlSystem::gameOver(int winner)
+ {
+	winner_ = winner;
 	state_ = GAMEOVER;
-	m.id = _m_ROUND_OVER;
-	mngr_->send(m);
+	Message m;
 	m.id = _m_GAME_OVER;
+	m.game_over.winner = winner;
 	mngr_->send(m);
+}
+
+
+
+void GameCtrlSystem::onCollission_FighterAsteroid()
+{
+	auto playerHealth = mngr_->getComponent<Health>(mngr_->getHandler(ecs::_hdlr_FIGHTER));
+	playerHealth->getDamage(1);
+	roundOver();
+	if (playerHealth->getHealth() <= 0) {
+		gameOver(1);
+	}
+}
+
+void GameCtrlSystem::onAsteroidsExtinction()
+{
+	roundOver();
+	gameOver(2);
 }
