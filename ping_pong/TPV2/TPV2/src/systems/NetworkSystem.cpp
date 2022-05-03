@@ -13,9 +13,11 @@
 #include "network_messages.h"
 #include "PaddlesSystem.h"
 
+
+
 NetworkSystem::NetworkSystem() :
 		host_(false), //
-		side_(0), //
+		fighter_(0), //
 		sock_(), //
 		p_(), //
 		sockSet_(), //
@@ -180,7 +182,7 @@ bool NetworkSystem::initHost() {
 		return false;
 
 	host_ = true;
-	side_ = 0;
+	fighter_ = 0;
 	connected_ = false;
 	return true;
 
@@ -219,7 +221,7 @@ bool NetworkSystem::initClient() {
 			if (m.id == net::_REQUEST_ACCEPTED) {
 				net::ReqAccMsg m;
 				m.deserialize(p_->data);
-				side_ = m.side;
+				fighter_ = m.side;
 				host_ = false;
 				connected_ = true;
 			}
@@ -242,7 +244,7 @@ void NetworkSystem::sendPaddlePosition(Transform *tr) {
 
 	net::PaddelPosMsg m;
 	m.id = net::_PADDLE_POS;
-	m.side = side_;
+	m.side = fighter_;
 	m.x = tr->pos_.getX();
 	m.y = tr->pos_.getY();
 	p_->address = otherPlayerAddr_;
@@ -255,7 +257,7 @@ void NetworkSystem::sendBallPosition(Transform *tr) {
 
 	net::BallPosMsg m;
 	m.id = net::_BALL_POS;
-	m.side = side_;
+	m.side = fighter_;
 	m.x = tr->pos_.getX();
 	m.y = tr->pos_.getY();
 	p_->address = otherPlayerAddr_;
@@ -268,7 +270,7 @@ void NetworkSystem::sendBallVelocity(Transform *tr) {
 
 	net::BallVelMsg m;
 	m.id = net::_BALL_VEL;
-	m.side = side_;
+	m.side = fighter_;
 	m.x = tr->vel_.getX();
 	m.y = tr->vel_.getY();
 
@@ -283,7 +285,7 @@ void NetworkSystem::handleConnectionRequest() {
 		connected_ = true;
 		net::ReqAccMsg m;
 		m.id = net::_REQUEST_ACCEPTED;
-		m.side = 1 - side_;
+		m.side = 1 - fighter_;
 		SDLNetUtils::serializedSend(m, p_, sock_, otherPlayerAddr_);
 	}
 }
@@ -294,7 +296,7 @@ void NetworkSystem::sendStarRoundtRequest() {
 	net::StartRequestMsg m;
 
 	m.id = net::_START_ROUND_REQUEST;
-	m.side = side_;
+	m.side = fighter_;
 	p_->address = otherPlayerAddr_;
 	SDLNetUtils::serializedSend(m, p_, sock_, otherPlayerAddr_);
 
@@ -306,7 +308,7 @@ void NetworkSystem::sendStarGameRequest() {
 	net::StartRequestMsg m;
 
 	m.id = net::_START_GAME_REQUEST;
-	m.side = side_;
+	m.side = fighter_;
 	p_->address = otherPlayerAddr_;
 	SDLNetUtils::serializedSend(m, p_, sock_, otherPlayerAddr_);
 

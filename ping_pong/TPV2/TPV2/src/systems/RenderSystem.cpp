@@ -23,7 +23,7 @@ void RenderSystem::initSystem() {
 }
 
 void RenderSystem::update() {
-	if (mngr_->getSystem<NetworkSystem>()->isReday()) {
+	if (mngr_->getSystem<NetworkSystem>()->isReady()) {
 		drawMsgs();
 		drawScore();
 	} else {

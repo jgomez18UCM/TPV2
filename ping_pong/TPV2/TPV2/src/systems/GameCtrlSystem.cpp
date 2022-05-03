@@ -18,7 +18,7 @@ GameCtrlSystem::~GameCtrlSystem() {
 }
 
 void GameCtrlSystem::update() {
-	if (!mngr_->getSystem<NetworkSystem>()->isReday())
+	if (!mngr_->getSystem<NetworkSystem>()->isReady())
 		return;
 
 	if (state_ != RUNNING) {

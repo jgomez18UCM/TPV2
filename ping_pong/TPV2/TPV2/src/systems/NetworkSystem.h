@@ -23,11 +23,11 @@ public:
 	bool connect();
 	void disconnect();
 
-	inline Uint8 getSide() {
-		return side_;
+	inline Uint8 getFighter() {
+		return fighter_;
 	}
 
-	inline bool isReday() {
+	inline bool isReady() {
 		return connected_;
 	}
 
@@ -68,7 +68,7 @@ private:
 	void tellOtherClientBallExit(Uint8 side);
 
 	bool host_;
-	Uint8 side_; // 0 left 1 right
+	Uint8 fighter_; // 0 left 1 right
 	UDPsocket sock_;
 	UDPpacket *p_;
 	SDLNet_SocketSet sockSet_;
